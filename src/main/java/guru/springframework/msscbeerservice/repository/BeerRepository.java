@@ -16,4 +16,5 @@ public interface BeerRepository extends JpaRepository<Beer, UUID> {
     Page<Beer> findAllByBeerNameAndBeerStyle(String beerName, String beerStyle, PageRequest pageRequest);
 
     Beer getBeerByBeerName(String beerName);
+    Beer findByUpc(String upc);
 }
