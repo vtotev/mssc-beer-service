@@ -3,6 +3,7 @@ package guru.springframework.msscbeerservice.web.controller;
 import guru.springframework.msscbeerservice.services.BeerService;
 import guru.springframework.msscbeerservice.web.model.BeerDto;
 import guru.springframework.msscbeerservice.web.model.BeerPagedList;
+import guru.springframework.msscbeerservice.web.model.BeerStyleEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -22,12 +23,12 @@ public class BeerController {
 
     private final BeerService beerService;
 
-    @GetMapping(produces = {"application/json"}, path = "beer")
+    @GetMapping(produces = { "application/json" }, path = "beer")
     public ResponseEntity<BeerPagedList> listBeers(@RequestParam(value = "pageNumber", required = false) Integer pageNumber,
                                                    @RequestParam(value = "pageSize", required = false) Integer pageSize,
                                                    @RequestParam(value = "beerName", required = false) String beerName,
-                                                   @RequestParam(value = "beerStyle", required = false) String beerStyle,
-                                                   @RequestParam(value = "showInventoryOnHand", required = false) Boolean showInventoryOnHand) {
+                                                   @RequestParam(value = "beerStyle", required = false) BeerStyleEnum beerStyle,
+                                                   @RequestParam(value = "showInventoryOnHand", required = false) Boolean showInventoryOnHand){
         if (showInventoryOnHand == null) {
             showInventoryOnHand = false;
         }
@@ -58,20 +59,13 @@ public class BeerController {
         return new ResponseEntity<>(beerService.getByUpc(upc), HttpStatus.OK);
     }
 
-    @GetMapping("beer/name/{beerName}")
-    public ResponseEntity<BeerDto> getBeerByName(@PathVariable("beerName") String beerName) {
-        return new ResponseEntity<>(beerService.getByName(beerName), HttpStatus.OK);
-    }
-
-    @PostMapping("beer")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BeerDto> saveNewBeer(@RequestBody @Validated BeerDto beerDto) {
+    @PostMapping(path = "beer")
+    public ResponseEntity saveNewBeer(@RequestBody @Validated BeerDto beerDto) {
         return new ResponseEntity<>(beerService.saveNewBeer(beerDto), HttpStatus.CREATED);
     }
 
     @PutMapping("beer/{beerId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<BeerDto> updateBeerById(@PathVariable("beerId") UUID beerId, @RequestBody @Validated BeerDto beerDto) {
+    public ResponseEntity updateBeerById(@PathVariable("beerId") UUID beerId, @RequestBody @Validated BeerDto beerDto){
         return new ResponseEntity<>(beerService.updateBeer(beerId, beerDto), HttpStatus.NO_CONTENT);
     }
 

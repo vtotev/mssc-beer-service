@@ -2,7 +2,7 @@ package guru.springframework.msscbeerservice.services.inventory;
 
 import guru.springframework.msscbeerservice.services.inventory.model.BeerInventoryDto;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -15,14 +15,17 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
+@ConfigurationProperties(prefix = "sfg.brewery", ignoreUnknownFields = false)
 @Component
 public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryService {
 
-    public static final String INVENTORY_PATH = "/api/v1/beer/{beerId}/inventory";
+    private final String INVENTORY_PATH = "/api/v1/beer/{beerId}/inventory";
     private final RestTemplate restTemplate;
-    @Value("${sfg.brewery.beer-inventory-service-host}")
     private String beerInventoryServiceHost;
 
+    public void setBeerInventoryServiceHost(String beerInventoryServiceHost) {
+        this.beerInventoryServiceHost = beerInventoryServiceHost;
+    }
 
     public BeerInventoryServiceRestTemplateImpl(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();

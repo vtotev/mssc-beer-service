@@ -6,6 +6,7 @@ import guru.springframework.msscbeerservice.web.exception.NotFoundException;
 import guru.springframework.msscbeerservice.web.mappers.BeerMapper;
 import guru.springframework.msscbeerservice.web.model.BeerDto;
 import guru.springframework.msscbeerservice.web.model.BeerPagedList;
+import guru.springframework.msscbeerservice.web.model.BeerStyleEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -41,10 +42,10 @@ public class BeerServiceImpl implements BeerService {
         return beerMapper.beerToBeerDto(repository.findByUpc(upc));
     }
 
+
     @Override
     public BeerDto saveNewBeer(BeerDto beerDto) {
-        return beerMapper.beerToBeerDto(
-                repository.save(beerMapper.beerDtoToBeer(beerDto)));
+        return beerMapper.beerToBeerDto(repository.save(beerMapper.beerDtoToBeer(beerDto)));
     }
 
     @Override
@@ -52,16 +53,16 @@ public class BeerServiceImpl implements BeerService {
         Beer beer = repository.findById(beerId).orElseThrow(NotFoundException::new);
 
         beer.setBeerName(beerDto.getBeerName());
-        beer.setBeerStyle(beer.getBeerStyle());
+        beer.setBeerStyle(beerDto.getBeerStyle().name());
         beer.setPrice(beerDto.getPrice());
         beer.setUpc(beerDto.getUpc());
 
         return beerMapper.beerToBeerDto(repository.save(beer));
     }
 
-    @Cacheable(cacheNames = "beerListCache", condition = "#showInventoryOnHand == false")
+    @Cacheable(cacheNames = "beerListCache", condition = "#showInventoryOnHand == false ")
     @Override
-    public BeerPagedList listBeers(String beerName, String beerStyle, PageRequest pageRequest, Boolean showInventoryOnHand) {
+    public BeerPagedList listBeers(String beerName, BeerStyleEnum beerStyle, PageRequest pageRequest, Boolean showInventoryOnHand) {
         BeerPagedList beerPagedList;
         Page<Beer> beerPage;
         if (!StringUtils.isEmpty(beerName) && !StringUtils.isEmpty(beerStyle)) {
@@ -96,8 +97,5 @@ public class BeerServiceImpl implements BeerService {
         return beerPagedList;
     }
 
-    @Override
-    public BeerDto getByName(String beerName) {
-        return beerMapper.beerToBeerDto(repository.getBeerByBeerName(beerName));
-    }
+
 }
