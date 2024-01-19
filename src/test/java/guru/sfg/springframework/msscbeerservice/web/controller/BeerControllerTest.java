@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:src/test/java/guru/sfg/springframework/msscbeerservice/web/controller/BeerControllerTest.java
 package guru.sfg.springframework.msscbeerservice.web.controller;
+========
+package sfg.springframework.msscbeerservice.web.controller;
+>>>>>>>> origin/main:src/test/java/sfg/springframework/msscbeerservice/web/controller/BeerControllerTest.java
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.sfg.springframework.msscbeerservice.bootstrap.BeerLoader;
