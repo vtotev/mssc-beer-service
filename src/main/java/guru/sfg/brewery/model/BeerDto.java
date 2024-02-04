@@ -1,4 +1,4 @@
-package guru.sfg.springframework.msscbeerservice.web.model;
+package guru.sfg.brewery.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.validation.constraints.NotBlank;
